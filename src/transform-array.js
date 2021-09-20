@@ -20,7 +20,14 @@ export default function transform(arr) {
   let arrCopy = arr.slice(0);
 
   arrCopy.map((el, i) => {
-    if (el === "--discard-next" && i + 1 < arrCopy.length - 1)
+    console.log(arrCopy);
+    if (
+      el === "--discard-next" &&
+      (arrCopy[i + 2] === "--double-prev" ||
+        arrCopy[i + 2] === "--discard-prev")
+    )
+      arrCopy.splice(i, 3);
+    else if (el === "--discard-next" && i + 1 < arrCopy.length - 1)
       arrCopy.splice(i, 2);
     else if (el === "--discard-next" && i + 1 >= arrCopy.length - 1)
       arrCopy.splice(i, 1);
@@ -28,12 +35,12 @@ export default function transform(arr) {
     if (el === "--discard-prev" && i - 1 > 0) arrCopy.splice(i - 1, 2);
     else if (el === "--discard-prev" && i - 1 < 0) arrCopy.splice(i, 1);
 
-    if (el === "--double-next" && i + 1 < arrCopy.length - 1)
+    if (el === "--double-next" && i + 1 <= arrCopy.length - 1)
       arrCopy.splice(i, 1, arrCopy[i + 1]);
-    else if (el === "--double-next" && i + 1 >= arrCopy.length - 1)
+    else if (el === "--double-next" && i + 1 > arrCopy.length - 1)
       arrCopy.splice(i, 1);
 
-    if (el === "--double-prev" && i - 1 > 0)
+    if (el === "--double-prev" && i - 1 >= 0)
       arrCopy.splice(i, 1, arrCopy[i - 1]);
     else if (el === "--double-prev" && i - 1 < 0) arrCopy.splice(i, 1);
   });
